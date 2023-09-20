@@ -1,0 +1,136 @@
+/*************************************************************/
+/* Author		: Omar Ashraf							     */
+/* Date 		: 1 AUG 2023								 */
+/* Version		: V01										 */
+/*************************************************************/
+#include "STD_TYPES.h"
+#include "BIT_MATH.h"
+
+#include "GPIO_interface.h"
+
+#include "SEVEN_SEG_interface.h"
+#include "SEVEN_SEG_private.h"
+#include "SEVEN_SEG_config.h"
+
+void SEVEN_SEG_voidDisplay(u8 copy_u8Number)
+{	
+	/* The driver works on PORTA pins (0 : 6) */
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , GPIO_OUTPUT_2M_PP);
+	
+	if(copy_u8Number <= 9)
+	{
+		switch(copy_u8Number)
+		{
+			case 0:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_LOW);
+				break;
+				
+			case 1:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_LOW);
+				break;
+			
+			case 2:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+			
+			case 3:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+				
+			case 4:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+			case 5:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+			case 6:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+			case 7:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_LOW);
+				break;	
+				
+			case 8:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+				
+			case 9:
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_A , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_B , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_C , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_D , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_E , SEVEN_SEG_LOW);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_F , SEVEN_SEG_HIGH);
+				MGPIO_voidSetPinValue(SEVEN_SEG_PORT , SEVEN_SEG_PIN_G , SEVEN_SEG_HIGH);
+				break;
+		}
+	}
+	else
+	{
+		/* return error */
+	}
+	
+	
+}
+
+
