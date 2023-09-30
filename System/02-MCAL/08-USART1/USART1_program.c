@@ -149,6 +149,9 @@ void MUSART1_voidReceiveStringSynch(u8 *Copy_Str)
 
 void USART1_IRQHandler(void)
 {
-	/* call back function (and pass the DR value),  Clear RXNE flag */
-	USART1_CallBack(USART1 -> DR);
+	if(USART1_CallBack != NULL)
+	{
+		/* call back function (and pass the DR value),  Clear RXNE flag */
+		USART1_CallBack(USART1 -> DR);
+	}
 }
