@@ -1,11 +1,13 @@
 /*******************************************************************************/
 /* Author		: Omar Ashraf							     				   */
-/* Date 		: 09 SEP 2023								 				   */
-/* Version		: V02										 				   */
+/* Date 		: 30 SEP 2023								 				   */
+/* Version		: V03										 				   */
 /*******************************************************************************/
 
 #include "STD_TYPES.h"
 #include "BIT_MATH.h"
+
+#include "GPIO_interface.h"
 
 #include "USART1_private.h"
 #include "USART1_interface.h"
@@ -17,13 +19,17 @@
 
 void MUSART1_voidInit(const USART_ConfigType *Config_Ptr)
 {	
+	/* USART Tx & Rx pins setup */
+	MGPIO_voidSetPinDirection(GPIO_PORTA , GPIO_PIN9 , GPIO_OUTPUT_2M_PP);
+	MGPIO_voidSetPinDirection(GPIO_PORTA , GPIO_PIN10, GPIO_INPUT_FLOATING);
+
 	/*************************** CR1 Description ***************************
 	* [0]SBK 	= 0 (No break)
 	* [1]RWU 	= 0 (Receiver in active Mode)
 	* [2]RE  	= 1 (Receiver Enable)
 	* [3]TE  	= 1 (Transmitter Enable)
 	* [4]IDLEIE = 0 (IDLE Interrupt Disable) 
-	* [5]RXNEIE = 0 (RXNE interrupt Disable)
+	* [5]RXNEIE = Enable or Disable RXNE interrupt (configured)
 	* [6]TCIE   = 0 (Transmission complete interrupt interrupt Disable)
 	* [7]TXEIE  = 0 (TXE interrupt Disable)
 	* [8]PEIE   = 0 (PE interrupt Disable)
@@ -38,6 +44,9 @@ void MUSART1_voidInit(const USART_ConfigType *Config_Ptr)
 	   Transmitter Enable
 	   USART Enable	       */
 	USART1 -> CR1 = (1<<2) | (1<<3) | (1<<13);
+	
+	/* Enable or Disable RXNE interrupt in bit (5) of CR1 Register */
+	USART1 -> CR1 = ((USART1 -> CR1) & (0x3FDF)) | ((Config_Ptr-> recieve_int) << 5);
 	
 	/* insert the required number of data-bits in "M" bit (12) of CR1 Register*/
 	USART1 -> CR1 = ((USART1 -> CR1) & (0x2FFF)) | ((Config_Ptr-> data_size) << 12);
@@ -72,7 +81,7 @@ void MUSART1_voidInit(const USART_ConfigType *Config_Ptr)
 
 
 
-void MUSART1_voidSendByte (const u8 Copy_u8Data)
+void MUSART1_voidSendByte(const u8 Copy_u8Data)
 {
 	/* Polling on TXE[7] flag of SR register
 	 * until the transmission register USART_DR is empty
@@ -94,7 +103,7 @@ void MUSART1_voidSendByte (const u8 Copy_u8Data)
 
 
 
-u8 MUSART1_u8ReceiveByte(void)
+u8 MUSART1_u8ReceiveByteSynch(void)
 {
 	/* Polling until the byte is received 
 	   the flag is cleared automatically by HW 
@@ -105,8 +114,10 @@ u8 MUSART1_u8ReceiveByte(void)
 	return(0xFF & (USART1 -> DR) );
 }
 
-
-
+void MUSART1_u8ReceiveByteAsynch(void (*Copy_ptr)(u8))
+{
+	USART1_CallBack = Copy_ptr;
+}
 
 
 void MUSART1_voidSendString(const u8 *Copy_Str)
@@ -119,10 +130,7 @@ void MUSART1_voidSendString(const u8 *Copy_Str)
 	}
 }
 
-
-
-
-void MUSART1_voidReceiveString(u8 *Copy_Str)
+void MUSART1_voidReceiveStringSynch(u8 *Copy_Str)
 {
 	u8 i = 0;
 	
@@ -137,4 +145,10 @@ void MUSART1_voidReceiveString(u8 *Copy_Str)
 	
 	/* After receiving the whole string plus the '#', replace the '#' with '\0' */
 	Copy_Str[i] = '\0';
+}
+
+void USART1_IRQHandler(void)
+{
+	/* call back function (and pass the DR value),  Clear RXNE flag */
+	USART1_CallBack(USART1 -> DR);
 }

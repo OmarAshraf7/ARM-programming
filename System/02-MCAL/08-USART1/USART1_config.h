@@ -1,7 +1,7 @@
 /*******************************************************************************/
 /* Author		: Omar Ashraf							     				   */
-/* Date 		: 09 SEP 2023								 				   */
-/* Version		: V02										 				   */
+/* Date 		: 30 SEP 2023								 				   */
+/* Version		: V03										 				   */
 /*******************************************************************************/
 
 #ifndef USART1_CONFIG_H
@@ -18,7 +18,7 @@
    StopBit Options:     ONE , HALF , TWO , ONEHALF
 
    Example:
-   USART_ConfigType USART_config   = {EIGHT , DISABLED , NOPARITY , ONE };
+   USART_ConfigType USART_config   = {INT_DISABLE , EIGHT , DISABLED , NOPARITY , ONE };
    MUSART1_voidInit(&USART_config);
 */
 
